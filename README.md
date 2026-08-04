@@ -34,14 +34,16 @@
 ### Linux и macOS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install | sh
 ```
 
-### Windows 10/11 — PowerShell
+### Windows 10/11
 
-```powershell
-curl.exe -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install.ps1 -o "$env:TEMP\lan-screen-stream-install.ps1"; powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\lan-screen-stream-install.ps1"
+```bat
+curl.exe -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install | cmd
 ```
+
+Обе команды используют один и тот же bootstrap-файл `install`, который выбирает нативный установщик для текущей ОС.
 
 Установщик:
 
