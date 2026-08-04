@@ -1,0 +1,12 @@
+: <<'WINDOWS_BOOTSTRAP'
+@echo off
+setlocal
+set "INSTALLER=%TEMP%\lan-screen-stream-install-%RANDOM%.ps1"
+curl.exe -fsSL "https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install.ps1" -o "%INSTALLER%"
+if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%INSTALLER%"
+set "CODE=%ERRORLEVEL%"
+del /q "%INSTALLER%" >nul 2>&1
+exit /b %CODE%
+WINDOWS_BOOTSTRAP
+exec sh -c 'curl -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install.sh | sh'
