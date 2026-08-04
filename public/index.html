@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LAN Screen Stream</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">WEBRTC · LOCAL NETWORK</p>
+        <h1>LAN Screen Stream</h1>
+      </div>
+      <div id="status" class="status">Отключено</div>
+    </header>
+
+    <section id="chooser" class="card chooser">
+      <h2>Режим устройства</h2>
+      <p>На компьютере выберите передачу. На телефоне, планшете или другом ПК — просмотр.</p>
+      <div class="actions">
+        <button id="hostMode" class="primary">Передавать экран</button>
+        <button id="viewerMode">Смотреть трансляцию</button>
+      </div>
+    </section>
+
+    <section id="hostPanel" class="card hidden">
+      <h2>Передатчик</h2>
+      <p>В окне браузера обязательно включите передачу системного звука.</p>
+      <div class="actions">
+        <button id="startShare" class="primary">Запустить трансляцию</button>
+        <button id="stopShare" disabled>Остановить</button>
+      </div>
+      <video id="preview" autoplay muted playsinline></video>
+      <div id="viewerCount" class="meta">Подключено зрителей: 0</div>
+    </section>
+
+    <section id="viewerPanel" class="card hidden">
+      <h2>Приёмник</h2>
+      <p>Звук воспроизводится на этом устройстве. Браузер может потребовать одно нажатие для запуска.</p>
+      <button id="enablePlayback" class="primary hidden">Включить видео и звук</button>
+      <video id="remoteVideo" autoplay playsinline controls></video>
+    </section>
+  </main>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
