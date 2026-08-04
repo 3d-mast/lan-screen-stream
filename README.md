@@ -29,9 +29,40 @@
   └─ браузер принимает WebRTC-видео и звук
 ```
 
-## Запуск
+## Установка одной командой
 
-Требуется только Node.js 20+. Внешних npm-зависимостей нет.
+### Linux и macOS
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install.sh | sh
+```
+
+### Windows 10/11 — PowerShell
+
+```powershell
+curl.exe -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install.ps1 -o "$env:TEMP\lan-screen-stream-install.ps1"; powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\lan-screen-stream-install.ps1"
+```
+
+Установщик:
+
+- сам определяет ОС и архитектуру процессора;
+- использует установленный Node.js 20+ либо загружает переносимый Node.js 22;
+- не требует Git и не выполняет `npm install`;
+- создаёт команду `lan-screen-stream`;
+- безопасно обновляет уже установленную копию;
+- проверяет JavaScript перед завершением установки.
+
+Поддерживаются Linux x64/ARM64/ARMv7, macOS Intel/Apple Silicon и Windows x64/ARM64. На musl-системах, включая Alpine Linux, Node.js устанавливается через `apk`.
+
+После установки запусти:
+
+```bash
+lan-screen-stream
+```
+
+## Ручной запуск для разработки
+
+Требуется Node.js 20+. Внешних npm-зависимостей нет.
 
 ```bash
 npm run dev
