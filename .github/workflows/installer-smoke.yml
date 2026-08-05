@@ -1,0 +1,75 @@
+name: Installer smoke tests
+
+on:
+  push:
+    paths:
+      - install
+      - install.sh
+      - install.ps1
+      - .github/workflows/installer-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate ASCII and PowerShell 5.1 syntax
+        shell: powershell
+        run: |
+          $bytes = [System.IO.File]::ReadAllBytes((Join-Path $PWD "install.ps1"))
+          if ($bytes | Where-Object { $_ -gt 127 }) {
+            throw "install.ps1 must remain ASCII-only for Windows PowerShell 5.1"
+          }
+
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Join-Path $PWD "install.ps1"),
+            [ref]$tokens,
+            [ref]$errors
+          ) | Out-Null
+
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+
+      - name: Run public curl bootstrap
+        shell: cmd
+        run: curl.exe -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install | cmd
+
+      - name: Verify installed launcher
+        shell: powershell
+        run: |
+          $launcher = Join-Path $env:LOCALAPPDATA "LANScreenStream\lan-screen-stream.cmd"
+          if (-not (Test-Path $launcher)) {
+            throw "Launcher was not installed"
+          }
+          & $launcher --help 2>&1 | Select-Object -First 1
+
+  unix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate shell syntax
+        shell: bash
+        run: |
+          bash -n install
+          sh -n install.sh
+
+      - name: Run public curl bootstrap
+        shell: bash
+        run: curl -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install | sh
+
+      - name: Verify installed launcher
+        shell: bash
+        run: test -x "$HOME/.local/bin/lan-screen-stream"
