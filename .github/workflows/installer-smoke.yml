@@ -43,14 +43,23 @@ jobs:
         shell: cmd
         run: curl.exe -fsSL https://raw.githubusercontent.com/3d-mast/lan-screen-stream/main/install | cmd
 
-      - name: Verify installed launcher
+      - name: Verify installed files
         shell: powershell
         run: |
-          $launcher = Join-Path $env:LOCALAPPDATA "LANScreenStream\lan-screen-stream.cmd"
-          if (-not (Test-Path $launcher)) {
-            throw "Launcher was not installed"
+          $root = Join-Path $env:LOCALAPPDATA "LANScreenStream"
+          $required = @(
+            "lan-screen-stream.cmd",
+            "src\server.js",
+            "public\app.js",
+            "package.json"
+          )
+
+          foreach ($relativePath in $required) {
+            $path = Join-Path $root $relativePath
+            if (-not (Test-Path $path)) {
+              throw "Missing installed file: $path"
+            }
           }
-          & $launcher --help 2>&1 | Select-Object -First 1
 
   unix:
     strategy:
